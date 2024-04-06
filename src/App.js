@@ -1,25 +1,40 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import BookSearch from './BookSearch';
+import BookCard from './BookCard';
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const { books, fetchBooks } = BookSearch();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      fetchBooks(searchQuery);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>Online Bookstore</h1>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search for books..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
       </header>
+      <main>
+        {books.map((book) => (
+          <BookCard key={book.id} book={book} />
+        ))}
+      </main>
     </div>
   );
 }
 
 export default App;
+
